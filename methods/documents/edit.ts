@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { DocumentsModel } from "../../models/document";
 import { now } from "../../utils/time";
 import * as yup from "yup";
+import { openAiEmbed } from "../../utils/openai";
 
 function validate(req: Request, res: Response) {
   const validationSchema = yup.object({
@@ -25,7 +26,8 @@ export default async function edit(req: Request, res: Response) {
     res.status(404).send({ message: "entity not found" });
     return;
   }
-  record.set({ ...body, updatedAt: now() });
+  const vector = await openAiEmbed(body.body);
+  record.set({ ...body, vector, updatedAt: now() });
   await record.save();
   res.send(record);
 }

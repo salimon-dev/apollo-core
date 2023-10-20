@@ -1,0 +1,27 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - main
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: clone
+        uses: actions/checkout@v3
+      - name: install
+        run: npm i
+      - name: build
+        run: npm run build
+      - name: setup
+        run: echo "${{ secrets.APOLLO_CORE_YAML }}" > ./app.yaml
+      - name: deploy
+        uses: google-github-actions/deploy-appengine@v0.2.0
+        with:
+          deliverables: app.yaml
+          version: v1
+          project_id: ${{ secrets.GCPROJECT }}
+          credentials: ${{ secrets.GCLOUD }}

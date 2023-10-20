@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { DocumentsModel } from "../../models/document";
 import { now } from "../../utils/time";
 import * as yup from "yup";
+import { openAiEmbed } from "../../utils/openai";
 
 function validate(req: Request, res: Response) {
   const validationSchema = yup.object({
@@ -20,9 +21,10 @@ function validate(req: Request, res: Response) {
 export default async function create(req: Request, res: Response) {
   const body = validate(req, res);
   if (!body) return; // validations error
+  const vector = await openAiEmbed(body.body);
   const document = await DocumentsModel.create({
     ...body,
-    vector: [],
+    vector,
     vector_method: "openai",
     createdAt: now(),
     updatedAt: now(),
