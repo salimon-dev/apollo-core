@@ -17,7 +17,7 @@ jobs:
       - name: build
         run: npm run build
       - name: setup
-        run: echo "${{ secrets.APOLLO_CORE_YAML }}" > ./app.yaml
+        run: echo "${{ secrets.APP_YML }}" > ./app.yaml
       - name: deploy
         uses: google-github-actions/deploy-appengine@v0.2.0
         with:
