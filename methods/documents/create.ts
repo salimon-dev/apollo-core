@@ -21,11 +21,11 @@ function validate(req: Request, res: Response) {
 export default async function create(req: Request, res: Response) {
   const body = validate(req, res);
   if (!body) return; // validations error
-  const vector = await openAiEmbed(body.body);
+  const vector_openai = await openAiEmbed(body.body);
   const document = await DocumentsModel.create({
     ...body,
-    vector,
-    vector_method: "openai",
+    vector_openai,
+    openai_version: "ada1",
     createdAt: now(),
     updatedAt: now(),
   });

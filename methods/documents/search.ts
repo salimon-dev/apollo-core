@@ -11,6 +11,7 @@ export default async function search(req: Request, res: Response) {
   try {
     const { page, pageSize } = validationSchema.validateSync(req.query, { abortEarly: false });
     const offset = (page - 1) * pageSize;
+
     const data = await DocumentsModel.find({}).skip(offset).limit(pageSize);
     const count = await DocumentsModel.count({});
     res.send({

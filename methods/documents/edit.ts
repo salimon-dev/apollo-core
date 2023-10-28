@@ -26,8 +26,8 @@ export default async function edit(req: Request, res: Response) {
     res.status(404).send({ message: "entity not found" });
     return;
   }
-  const vector = await openAiEmbed(body.body);
-  record.set({ ...body, vector, updatedAt: now() });
+  const vector_openai = await openAiEmbed(body.body);
+  record.set({ ...body, vector_openai, updatedAt: now() });
   await record.save();
   res.send(record);
 }
